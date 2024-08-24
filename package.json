@@ -32,10 +32,12 @@
     "usehooks-ts": "^3.1.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.46.1",
     "@tanstack/eslint-plugin-query": "^5.52.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "dotenv": "^16.4.5",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "postcss": "^8",
