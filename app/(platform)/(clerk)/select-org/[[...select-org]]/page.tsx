@@ -1,4 +1,4 @@
-import { OrganizationList } from "@clerk/nextjs"
+import { OrganizationList } from "@clerk/nextjs";
 
 export default function CreateOrganizationPage() {
   return (
@@ -9,5 +9,5 @@ export default function CreateOrganizationPage() {
         afterCreateOrganizationUrl={"/organization/:id"}
       />
     </div>
-  )
+  );
 }

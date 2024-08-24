@@ -1,11 +1,11 @@
-"use client"
-import { onClose, onOpen } from "@/lib/store/slices/mobileSidebarSlice"
-import { RootState } from "@/lib/store/store"
-import { useDispatch, useSelector } from "react-redux"
+"use client";
+import { onClose, onOpen } from "@/lib/store/slices/mobileSidebarSlice";
+import { RootState } from "@/lib/store/store";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Page() {
-  const count = useSelector((state: RootState) => state.mobileSidebar.value)
-  const dispatch = useDispatch()
+  const count = useSelector((state: RootState) => state.mobileSidebar.value);
+  const dispatch = useDispatch();
   return (
     <div>
       {" "}
@@ -17,5 +17,5 @@ export default function Page() {
         on close
       </button>
     </div>
-  )
+  );
 }

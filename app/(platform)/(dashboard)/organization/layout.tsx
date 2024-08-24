@@ -1,10 +1,10 @@
-"use client"
-import Sidebar from "../_components/Sidebar"
+"use client";
+import Sidebar from "../_components/Sidebar";
 
 export default function OrganizationLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <section className="pt-20 md:pt-24 px-4 max-w-6xl 2xl:max-w-screen-2xl mx-auto">
@@ -15,5 +15,5 @@ export default function OrganizationLayout({
         {children}
       </div>
     </section>
-  )
+  );
 }

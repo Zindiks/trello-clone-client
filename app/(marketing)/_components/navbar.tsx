@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const Navbar = () => {
   return (
@@ -17,5 +17,5 @@ export const Navbar = () => {
         </div>
       </div>
     </div>
-  )
-}  
+  );
+};

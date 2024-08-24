@@ -1,5 +1,5 @@
-"use client"
-import { OrganizationProfile } from "@clerk/nextjs"
+"use client";
+import { OrganizationProfile } from "@clerk/nextjs";
 
 export default function SettingsPage() {
   return (
@@ -21,5 +21,5 @@ export default function SettingsPage() {
         }}
       />
     </div>
-  )
+  );
 }

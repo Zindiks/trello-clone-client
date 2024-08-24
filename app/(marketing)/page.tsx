@@ -1,22 +1,20 @@
-"use client"
-import { Button } from "@/components/ui/button"
-import { Medal } from "lucide-react"
-import Link from "next/link"
-import { cn } from "@/lib/utils"
-import { Poppins } from "next/font/google"
+"use client";
+import { Button } from "@/components/ui/button";
+import { Medal } from "lucide-react";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { Poppins } from "next/font/google";
 
-import type { RootState } from "@/lib/store/store"
-import { useDispatch, useSelector } from "react-redux"
-import { onOpen, onClose } from "@/lib/store/slices/mobileSidebarSlice"
+import type { RootState } from "@/lib/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { onOpen, onClose } from "@/lib/store/slices/mobileSidebarSlice";
 
 const textFont = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-})
+});
 
 export default function Page() {
-
-
   return (
     <div className="flex items-center justify-center flex-col">
       <div className={cn("flex items-center justify-center flex-col")}>
@@ -43,8 +41,6 @@ export default function Page() {
       <Button className="mt-6" size={"lg"} asChild>
         <Link href={"/sign-up"}>Get Taskify for free</Link>
       </Button>
-
-
     </div>
-  )
+  );
 }

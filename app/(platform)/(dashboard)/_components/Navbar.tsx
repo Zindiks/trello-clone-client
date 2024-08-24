@@ -1,8 +1,8 @@
-"use client"
-import { Button } from "@/components/ui/button"
-import { OrganizationSwitcher, UserButton } from "@clerk/nextjs"
-import { Plus } from "lucide-react"
-import { MobileSidebar } from "./MobileSidebar"
+"use client";
+import { Button } from "@/components/ui/button";
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
+import { Plus } from "lucide-react";
+import { MobileSidebar } from "./MobileSidebar";
 
 export default function Navbar() {
   return (
@@ -55,5 +55,5 @@ export default function Navbar() {
         />
       </div>
     </nav>
-  )
+  );
 }

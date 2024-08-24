@@ -1,10 +1,10 @@
-"use client"
-import OrgControl from "./_components/OrgControl"
+"use client";
+import OrgControl from "./_components/OrgControl";
 
 export default function OrganizationIdLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <>
@@ -14,5 +14,5 @@ export default function OrganizationIdLayout({
 
       {children}
     </>
-  )
+  );
 }

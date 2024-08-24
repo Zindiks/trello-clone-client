@@ -1,29 +1,28 @@
-"use client"
+"use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import axios from "axios"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
-import { Button } from "@/components/ui/button"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast";
 
 const OrganizationIdPage = () => {
-  const { toast } = useToast()
+  const { toast } = useToast();
 
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["check"],
     queryFn: () =>
       fetch("http://localhost:4000/api/boards/all").then((res) => res.json()),
-  })
+  });
 
   const mutation = useMutation({
     mutationFn: (event) => {
-      event.preventDefault()
+      event.preventDefault();
 
       const formData = {
         title: event.target.title.value,
-      }
+      };
 
       return axios.post(
         "http://localhost:4000/api/boards/create",
@@ -32,18 +31,18 @@ const OrganizationIdPage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-        }
-      )
+        },
+      );
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries(["check"])
+      queryClient.invalidateQueries(["check"]);
 
       toast({
         description: "Board succesfully created",
-      })
+      });
     },
-  })
+  });
 
   return (
     <div>
@@ -64,11 +63,11 @@ const OrganizationIdPage = () => {
 
       <div>
         {data?.map((board) => {
-          return <div key={board.id}>{board.title}</div>
+          return <div key={board.id}>{board.title}</div>;
         })}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default OrganizationIdPage
+export default OrganizationIdPage;

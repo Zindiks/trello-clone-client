@@ -1,31 +1,27 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server"
-import { NextResponse } from "next/server"
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-const isPublicRoute = createRouteMatcher([
-  "/sign-in(.*)",
-  "/sign-up(.*)",
-  "/",
-])
+const isPublicRoute = createRouteMatcher(["/sign-in(.*)", "/sign-up(.*)", "/"]);
 
 export default clerkMiddleware((auth, request) => {
   if (!isPublicRoute(request)) {
-    auth().protect()
+    auth().protect();
   }
 
   if (auth().userId && isPublicRoute(request)) {
-    let path = "/select-org"
+    let path = "/select-org";
 
     if (isPublicRoute(request) && auth().orgId) {
-      path = `/organization/${auth().orgId}`
+      path = `/organization/${auth().orgId}`;
     }
 
-    const orgSelection = new URL(path, request.url)
+    const orgSelection = new URL(path, request.url);
 
-    return NextResponse.redirect(orgSelection)
+    return NextResponse.redirect(orgSelection);
   }
 
   if (!auth().userId && !isPublicRoute(request)) {
-    return auth().redirectToSignIn()
+    return auth().redirectToSignIn();
   }
 
   if (
@@ -33,10 +29,10 @@ export default clerkMiddleware((auth, request) => {
     !auth().orgId &&
     request.nextUrl.pathname !== "/select-org"
   ) {
-    const orgSelection = new URL("/select-org", request.url)
-    return NextResponse.redirect(orgSelection)
+    const orgSelection = new URL("/select-org", request.url);
+    return NextResponse.redirect(orgSelection);
   }
-})
+});
 
 export const config = {
   matcher: [
@@ -45,4 +41,4 @@ export const config = {
     // Always run for API routes
     "/(api|trpc)(.*)",
   ],
-}
+};

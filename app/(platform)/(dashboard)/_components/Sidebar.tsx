@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Plus } from "lucide-react"
-import { useLocalStorage } from "usehooks-ts"
-import { useOrganization, useOrganizationList } from "@clerk/nextjs"
+import Link from "next/link";
+import { Plus } from "lucide-react";
+import { useLocalStorage } from "usehooks-ts";
+import { useOrganization, useOrganizationList } from "@clerk/nextjs";
 
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Accordion } from "@/components/ui/accordion"
-import NavItem from "./NavItem"
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Accordion } from "@/components/ui/accordion";
+import NavItem from "./NavItem";
 
 interface SidebarProps {
-  storageKey?: string
+  storageKey?: string;
 }
 
 export default function Sidebar({
@@ -20,34 +20,34 @@ export default function Sidebar({
 }: SidebarProps) {
   const [expanded, setExpanded] = useLocalStorage<Record<string, any>>(
     storageKey,
-    {}
-  )
+    {},
+  );
 
   const { organization: activeOrganization, isLoaded: isLoadedOrg } =
-    useOrganization()
+    useOrganization();
 
   const { userMemberships, isLoaded: isLoadedOrgList } = useOrganizationList({
     userMemberships: {
       infinite: true,
     },
-  })
+  });
 
   const defaultAccordionValue: string[] = Object.keys(expanded).reduce(
     (acc: string[], key: string) => {
       if (expanded[key]) {
-        acc.push(key)
+        acc.push(key);
       }
-      return acc
+      return acc;
     },
-    []
-  )
+    [],
+  );
 
   const onExpand = (id: string) => {
     setExpanded((curr) => ({
       ...curr,
       [id]: !expanded[id],
-    }))
-  }
+    }));
+  };
 
   if (!isLoadedOrg || !isLoadedOrgList || userMemberships.isLoading) {
     return (
@@ -63,7 +63,7 @@ export default function Sidebar({
           <NavItem.Skeleton />
         </div>
       </>
-    )
+    );
   }
 
   return (
@@ -98,9 +98,9 @@ export default function Sidebar({
               organization={organization}
               onExpand={onExpand}
             />
-          )
+          );
         })}
       </Accordion>
     </>
-  )
+  );
 }
