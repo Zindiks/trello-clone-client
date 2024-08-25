@@ -13,7 +13,20 @@ interface Board {
 
 interface FetchError {
   message: string;
+  response: {
+    data: {
+      message: string;
+    };
+  };
 }
+
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Trash } from "lucide-react";
+
+const formSchema = z.object({
+  title: z.string().min(3).max(36),
+});
 
 const OrganizationIdPage = () => {
   const [formData, setFormData] = useState({
@@ -35,7 +48,7 @@ const OrganizationIdPage = () => {
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading, error } = useQuery<Board[], FetchError>({
+  const { data} = useQuery<Board[], FetchError>({
     queryKey: ["check"],
     queryFn: () =>
       fetch("http://localhost:4000/api/boards/all").then((res) => res.json()),
@@ -70,11 +83,13 @@ const OrganizationIdPage = () => {
       });
     },
 
-    onError: ({ message }) => {
+    onError: ({ message, response }) => {
+      console.log(data);
+
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: message,
+        description: response.data.message,
       });
     },
   });
@@ -111,7 +126,7 @@ const OrganizationIdPage = () => {
           value={formData.title}
           onChange={handleInputChange}
         />
-        <button type="submit">{"Submit"}</button>
+        <Button type="submit">{"Submit"}</Button>
       </form>
 
       {createMutation.isError && (
@@ -123,9 +138,12 @@ const OrganizationIdPage = () => {
           return (
             <div key={board.id}>
               {board.title}{" "}
-              <button onClick={() => deleteMutation.mutate(board.id)}>
-                ...delete
-              </button>
+              <Button
+                variant={"destructive"}
+                onClick={() => deleteMutation.mutate(board.id)}
+              >
+                <Trash className="w-5 h-5" />
+              </Button>
             </div>
           );
         })}
