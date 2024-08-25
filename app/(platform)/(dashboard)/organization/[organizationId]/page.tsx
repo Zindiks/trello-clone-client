@@ -1,28 +1,53 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 import { useToast } from "@/components/ui/use-toast";
+import { useState } from "react";
+
+interface Board {
+  id: number;
+  title: string;
+}
+
+interface FetchError {
+  message: string;
+}
 
 const OrganizationIdPage = () => {
+  const [formData, setFormData] = useState({
+    title: "",
+  });
+
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = event.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const { toast } = useToast();
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error } = useQuery<Board[], FetchError>({
     queryKey: ["check"],
     queryFn: () =>
       fetch("http://localhost:4000/api/boards/all").then((res) => res.json()),
   });
 
-  const mutation = useMutation({
-    mutationFn: (event) => {
+  const createMutation = useMutation<
+    AxiosResponse,
+    FetchError,
+    React.FormEvent<HTMLFormElement>
+  >({
+    mutationFn: (event: React.FormEvent) => {
       event.preventDefault();
-
-      const formData = {
-        title: event.target.title.value,
-      };
 
       return axios.post(
         "http://localhost:4000/api/boards/create",
@@ -35,35 +60,74 @@ const OrganizationIdPage = () => {
       );
     },
 
-    onSuccess: () => {
-      queryClient.invalidateQueries(["check"]);
+    onSuccess: ({ data }) => {
+      queryClient.invalidateQueries();
+
+      setFormData({ title: "" });
 
       toast({
-        description: "Board succesfully created",
+        description: `Board ${data.title} succesfully created`,
+      });
+    },
+
+    onError: ({ message }) => {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: message,
+      });
+    },
+  });
+
+  const deleteMutation = useMutation<AxiosResponse, FetchError, number>({
+    mutationFn: (boardId: number) => {
+      return axios.delete(`http://localhost:4000/api/boards/${boardId}`);
+    },
+
+    onSuccess: ({ data }) => {
+      queryClient.invalidateQueries();
+      toast({
+        description: `Board ${data.title} successfully deleted`,
+      });
+    },
+    onError: ({ message }) => {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: message,
       });
     },
   });
 
   return (
     <div>
-      <form onSubmit={mutation.mutate}>
+      <form onSubmit={createMutation.mutate}>
         <input
           id="title"
           name="title"
           required
           placeholder="Enter a board title"
           className="border-black border p-1"
+          value={formData.title}
+          onChange={handleInputChange}
         />
-        <button type="submit" disabled={mutation.isLoading}>
-          {mutation.isLoading ? "Submitting..." : "Submit"}
-        </button>
+        <button type="submit">{"Submit"}</button>
       </form>
 
-      {mutation.isError && <div>Error: {mutation.error.message}</div>}
+      {createMutation.isError && (
+        <div>Error: {createMutation.error.message}</div>
+      )}
 
       <div>
         {data?.map((board) => {
-          return <div key={board.id}>{board.title}</div>;
+          return (
+            <div key={board.id}>
+              {board.title}{" "}
+              <button onClick={() => deleteMutation.mutate(board.id)}>
+                ...delete
+              </button>
+            </div>
+          );
         })}
       </div>
     </div>
