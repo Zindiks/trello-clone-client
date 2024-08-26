@@ -7,7 +7,6 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { Input } from "@/components/ui/input";
 
-
 const boardSchema = z.object({
   title: z
     .string()
@@ -56,15 +55,16 @@ const BoardForm = () => {
         name="title"
         required
         placeholder="Enter a board title"
-        className="border-black border p-1"
+        className="mb-2"
         value={formData.title}
         onChange={handleInputChange}
       />
-      <Button type="submit">Submit</Button>
+      <Button className="w-full" type="submit">
+        Submit
+      </Button>
 
       {/* Отображение ошибки, если валидация не прошла */}
       {errors && <p className="text-red-500">{errors}</p>}
-
     </form>
   );
 };
