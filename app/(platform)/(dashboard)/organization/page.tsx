@@ -5,10 +5,16 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function Page() {
   const count = useSelector((state: RootState) => state.mobileSidebar.value);
+
+  const org = useSelector((state: RootState) => state.organization.orgId);
+
+  console.log(org)
   const dispatch = useDispatch();
   return (
     <div>
       {" "}
+
+      <p className={"text-9xl"}>{org}</p>
       <span className="text-9xl">{count ? "true" : "false"}</span>
       <button aria-label="Increment value" onClick={() => dispatch(onOpen())}>
         on open

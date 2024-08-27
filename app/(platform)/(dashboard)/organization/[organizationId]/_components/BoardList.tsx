@@ -5,9 +5,21 @@ import { ResponseBoard, useBoards } from "@/hooks/useBoards";
 import Hint from "./Hint";
 import FormPopover from "./FormPopover";
 import CreateBoard from "./CreateBoard";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store/store";
+import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const BoardList = () => {
-  const { data, isLoading, isError, deleteBoard } = useBoards();
+
+  const org = useSelector((state: RootState) => state.organization.orgId);
+  const { data, isLoading, isError, deleteBoard } = useBoards(org);
+  
+  
+  
+
+
+
 
   // if (isLoading) return <div>Loading...</div>;
   // if (isError) return <div>Error loading boards...</div>;
@@ -19,22 +31,17 @@ const BoardList = () => {
         Your boards
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        {/* {data?.map((board) => (
-          <div
-            key={board.id}
-            role="button"
-            className=" relative aspect-video w-full h-full bg-muted rounded-sm flex flex-col gap-y-1 items-center justify-center hover:opacity-75 transition"
-          >
-            <p className="text-sm">{board.title}</p>
 
-            <Button
-              variant={"destructive"}
-              onClick={() => deleteBoard.mutate(board.id)}
-            >
-              <Trash className="w-5 h-5" />
-            </Button>
-          </div>
-        ))} */}
+        {data?.map((board) => (
+          <Link href={`/board/${board.id}`} key={board.id} style={{backgroundImage: `url(${board.imageThumbUrl})`}} className={"group relative aspect-video bg-no-repeat bg-center bg-cover bg-sky-700 rounded-sm h-full w-full p-2 overflow-hidden"}>
+            <div className={"absolute inset-0 bg-black/30 group-hover:bg-black/40 transition p-2"}>
+              <p className={"relative text-white"}>{board.title}</p>
+            </div>
+          </Link>
+        ))}
+
+
+  
 
         <FormPopover>
           <div role="button">
@@ -47,3 +54,20 @@ const BoardList = () => {
 };
 
 export default BoardList;
+
+
+
+BoardList.Skeleton = function SkeletonBoardList(){
+  return (
+    <div className={"grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"}>
+      <Skeleton className={"aspect-video h-full w-full p-2"}/>
+      <Skeleton className={"aspect-video h-full w-full p-2"}/>
+      <Skeleton className={"aspect-video h-full w-full p-2"}/>
+      <Skeleton className={"aspect-video h-full w-full p-2"}/>
+      <Skeleton className={"aspect-video h-full w-full p-2"}/>
+      <Skeleton className={"aspect-video h-full w-full p-2"}/>
+      <Skeleton className={"aspect-video h-full w-full p-2"}/>
+      <Skeleton className={"aspect-video h-full w-full p-2"}/>
+    </div>
+  )
+}

@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { unsplash } from "@/lib/unsplash";
+import { useState } from "react";
 import { Check, Loader2 } from "lucide-react";
 import { useFormStatus } from "react-dom";
 import { cn } from "@/lib/utils";

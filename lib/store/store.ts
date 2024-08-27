@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import mobileSidebarReducer from "./slices/mobileSidebarSlice";
+import currentOrgReducer from "./slices/currentOrgSlice"
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       mobileSidebar: mobileSidebarReducer,
+      organization: currentOrgReducer,
     },
   });
 };

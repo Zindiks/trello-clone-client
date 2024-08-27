@@ -16,6 +16,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@clerk/clerk-react";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { X } from "lucide-react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store/store";
 
 interface FormPopoverProp {
   children: React.ReactNode;
@@ -41,8 +43,9 @@ export default function FormPopover({ children }: FormPopoverProp) {
 
   const [errors, setErrors] = useState<string | null>(null);
 
-  const { orgId } = useAuth();
-  const { createBoard } = useBoards();
+  const org = useSelector((state: RootState) => state.organization.orgId);
+
+  const { createBoard } = useBoards(org);
   const { toast } = useToast();
 
   const onSubmit = (formData: FormData) => {
@@ -61,10 +64,10 @@ export default function FormPopover({ children }: FormPopoverProp) {
     const [imageId, imageThumbUrl, imageFullUrl, imageLinkHTML, imageUserName] =
       image.split("|");
 
-    if (orgId !== null && orgId !== undefined) {
+    if (org !== null && org !== undefined) {
       const createBoardInput = {
         title,
-        orgId,
+        orgId: org,
         imageId,
         imageThumbUrl,
         imageFullUrl,
@@ -81,8 +84,8 @@ export default function FormPopover({ children }: FormPopoverProp) {
       }
 
       setErrors(null);
-
       createBoard.mutate(createBoardInput);
+      closeRef.current?.click()
     }
   };
 
@@ -92,11 +95,10 @@ export default function FormPopover({ children }: FormPopoverProp) {
       <PopoverContent className="w-80">
         <p>Create a new board</p>
 
-        <PopoverClose asChild>
+        <PopoverClose asChild ref={closeRef}>
           <Button className="h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600">
             <X className="w-4 h-4" />
           </Button>
-          §
         </PopoverClose>
 
         <form action={onSubmit}>

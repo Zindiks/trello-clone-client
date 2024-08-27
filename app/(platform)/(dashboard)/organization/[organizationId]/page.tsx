@@ -1,27 +1,36 @@
-"use client"
+"use client";
 import BoardList from "./_components/BoardList";
-import { useAuth,} from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/lib/store/store";
+import { Suspense, useEffect } from "react";
+import { changeOrg } from "@/lib/store/slices/currentOrgSlice";
 
 const OrganizationIdPage = () => {
+  const { isLoaded, userId, orgId } = useAuth();
 
-  // const {isLoaded, userId, orgId} = useAuth()
-  
+  const dispatch = useDispatch();
+  const org = useSelector((state: RootState) => state.organization.orgId);
 
-  // if(!isLoaded){
-  //   return (<div>Loading...</div>)
-  // }
+  useEffect(() => {
+    if (orgId !== undefined && orgId !== null) {
+      dispatch(changeOrg(orgId));
+    }
+  }, [orgId, dispatch]); // Добавляем dispatch в зависимости
 
-
-      // console.log(userId);
-      // console.log(orgId);
-
-  
+  if (!isLoaded) {
+    return <BoardList.Skeleton />;
+  }
 
 
   return (
     <div className="w-full">
-      {/* <BoardForm /> */}
-      <BoardList />
+
+      <Suspense fallback={<BoardList.Skeleton />}>
+
+        <BoardList />
+
+      </Suspense>
     </div>
   );
 };

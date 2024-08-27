@@ -28,20 +28,20 @@ interface FetchError {
   };
 }
 
-export const useBoards = () => {
+export const useBoards = (orgId:string) => {
   const queryClient = useQueryClient();
 
   const { toast } = useToast();
 
-  const fetchBoards = () =>
-    fetch("http://localhost:4000/api/boards/all").then((res) => res.json());
+  const fetchBoards = (orgId:string) =>
+    fetch("http://localhost:4000/api/boards/"+ orgId).then((res) => res.json());
 
   const { data, error, isError, isLoading } = useQuery<
     ResponseBoard[],
     FetchError
   >({
-    queryKey: ["boards"],
-    queryFn: fetchBoards,
+    queryKey: ["boards",orgId],
+    queryFn: () => fetchBoards(orgId),
   });
 
   const createBoard = useMutation<AxiosResponse, FetchError, CreateBoard>({
