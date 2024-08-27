@@ -17,7 +17,6 @@ interface BoardFormProps {
 
 const BoardForm = ({id,errors}:BoardFormProps) => {
   const [formData, setFormData] = useState({ title: "" });
-  const { createBoard } = useBoards();
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

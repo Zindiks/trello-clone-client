@@ -57,7 +57,6 @@ export default function FormPopover({ children }: FormPopoverProp) {
         title: "Please pick an image",
         description: "Image is required",
       });
-
       return;
     }
 
@@ -79,7 +78,6 @@ export default function FormPopover({ children }: FormPopoverProp) {
 
       if (!validation.success) {
         setErrors(validation.error.errors[0]?.message || "Invalid input");
-
         return;
       }
 

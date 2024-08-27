@@ -6,12 +6,16 @@ import { auth } from "@clerk/nextjs/server";
 export interface ResponseBoard {
   id: string;
   title: string;
+  orgId: string;
 
   imageId: string;
   imageThumbUrl: string;
   imageFullUrl: string;
   imageLinkHTML: string;
   imageUserName: string;
+
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CreateBoard {
@@ -19,7 +23,12 @@ export interface CreateBoard {
   orgId: string;
 }
 
-interface FetchError {
+export interface UpdateBoardTitle {
+  id: string;
+  title: string;
+}
+
+export interface FetchError {
   message: string;
   response: {
     data: {
@@ -33,16 +42,24 @@ export const useBoards = (orgId:string) => {
 
   const { toast } = useToast();
 
-  const fetchBoards = (orgId:string) =>
-    fetch("http://localhost:4000/api/boards/"+ orgId).then((res) => res.json());
+  const fetchBoards = async (orgId: string) => {
+    try {
+      const response = await axios.get(`http://localhost:4000/api/boards/all/${orgId}`);
+      return response.data; // Получаем данные из response.data
+    } catch (error) {
+      throw new Error(`Error fetching boards: ${error}`);
+    }
+  };
 
-  const { data, error, isError, isLoading } = useQuery<
+  const boards = useQuery<
     ResponseBoard[],
     FetchError
   >({
     queryKey: ["boards",orgId],
     queryFn: () => fetchBoards(orgId),
   });
+
+
 
   const createBoard = useMutation<AxiosResponse, FetchError, CreateBoard>({
     mutationFn: (formData) => {
@@ -98,12 +115,51 @@ export const useBoards = (orgId:string) => {
     },
   });
 
+  const updateBoardTitle = useMutation<AxiosResponse, FetchError, UpdateBoardTitle>({
+    mutationFn: (formData) => {
+
+
+      console.log(formData);
+      return axios.patch(
+        "http://localhost:4000/api/boards/update",
+        JSON.stringify(formData),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["board"],
+      });
+      toast({
+        description:  `Board title has been changed`,
+      });
+    },
+    onError: ({ response }) => {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: response.data.message,
+      });
+    },
+  });
+
+
   return {
-    data,
-    error,
-    isError,
-    isLoading,
+    boards,
     createBoard,
     deleteBoard,
+    updateBoardTitle,
   };
 };
+
+
+// data,
+//   error,
+//   isError,
+//   isLoading,
+
+
