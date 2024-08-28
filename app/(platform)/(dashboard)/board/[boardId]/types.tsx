@@ -7,10 +7,29 @@ export interface Board {
   imageFullUrl: string
   imageLinkHTML: string
   imageUserName: string
+  lists: List[]
+  createdAt:string
+  updatedAt:string
 
-  createAt:string
-  updateAt:string
+}
 
 
 
+export interface List{
+  id:string,
+  title:string,
+  order:number,
+  cards: Card[]
+  createdAt:string,
+  updatedAt:string,
+  boardId:string,
+}
+
+
+export interface Card{
+  id:string,
+  title:string
+  order:number
+  description?:string
+  listId:string
 }

@@ -3,6 +3,7 @@ import axios, { AxiosResponse } from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { auth } from "@clerk/nextjs/server";
 
+
 export interface ResponseBoard {
   id: string;
   title: string;
@@ -105,6 +106,7 @@ export const useBoards = (orgId:string) => {
       toast({
         description: `Board ${data.title} successfully deleted`,
       });
+
     },
     onError: ({ message }) => {
       toast({

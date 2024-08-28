@@ -31,9 +31,6 @@ const fetchBoard = async (boardId: string) => {
 
 
 
-
-
-
 const BoardIdLayout: React.FC<BoardIdLayoutProps> = ({ children, params }) => {
   const { boardId } = params;
 
@@ -51,8 +48,6 @@ const { data, isLoading } = useQuery({
   }
 
 
-  console.log(data)
-
 
 
   return (
@@ -68,10 +63,7 @@ const { data, isLoading } = useQuery({
       <BoardNavBar data={data} />
 
       <div className={"absolute inset-0 bg-black/10"} />
-    <main className="relative pt-28">
-      <h1>{data?.title ?? "Board"}</h1>
-
-
+        <main className="relative pt-12 p-2">
       {children}
     </main>
 

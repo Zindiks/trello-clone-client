@@ -47,14 +47,18 @@ const onSubmit = (formData:FormData) => {
 
 
   if(title === data.title){
-
     disableEditing()
     return
   }
 
-  updateBoardTitle.mutate({title,id})
+  updateBoardTitle.mutate({title,id}, {
+    onSuccess: () => {
+      disableEditing();
+    }
+    }
+    )
 
-  disableEditing();
+
 }
 
 
