@@ -1,6 +1,6 @@
 "use client";
 
-import ListWrapper from "../_components/ListWrapper";
+import ListWrapper from "./ListWrapper";
 import { PlusIcon } from "lucide-react";
 import { ElementRef, useRef, useState } from "react";
 import { useEventListener, useOnClickOutside } from "usehooks-ts";
@@ -13,7 +13,8 @@ const ListForm = () => {
   const formRef = useRef<ElementRef<"form">>(null);
   const inputRef = useRef<ElementRef<"input">>(null);
 
-  const { boardId } = useParams();
+  const { board_id } = useParams();
+
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -37,14 +38,15 @@ const ListForm = () => {
   useEventListener("keydown", onKeyDown);
   useOnClickOutside(formRef, disableEditing);
 
-  const { createList } = useLists(boardId as string);
+  const { createList } = useLists(board_id as string);
 
   const onSubmit = (formData: FormData) => {
     const title = formData.get("title") as string;
-    const boardId = formData.get("boardId") as string;
+    const board_id = formData.get("board_id") as string;
 
     createList.mutate(
-      { title, boardId },
+      { title, board_id },
+      
       {
         onSuccess: () => {
           console.log("hello");
@@ -75,7 +77,7 @@ const ListForm = () => {
             placeholder={"Enter list title..."}
           />
 
-          <input hidden value={boardId} name={"boardId"} />
+          <input hidden defaultValue={board_id} name={"board_id"} />
 
           <div className={"flex items-center gap-x-1"}>
             <Button type="submit">Add list</Button>

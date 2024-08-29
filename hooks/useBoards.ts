@@ -1,27 +1,25 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosResponse } from "axios";
 import { useToast } from "@/components/ui/use-toast";
-import { auth } from "@clerk/nextjs/server";
-
 
 export interface ResponseBoard {
   id: string;
   title: string;
-  orgId: string;
+  org_id: string;
 
-  imageId: string;
-  imageThumbUrl: string;
-  imageFullUrl: string;
-  imageLinkHTML: string;
-  imageUserName: string;
+  image_id: string;
+  image_thumb_url: string;
+  image_full_url: string;
+  image_link_html: string;
+  image_username: string;
 
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface CreateBoard {
   title: string;
-  orgId: string;
+  org_id: string;
 }
 
 export interface UpdateBoardTitle {
@@ -38,14 +36,14 @@ export interface FetchError {
   };
 }
 
-export const useBoards = (orgId:string) => {
+export const useBoards = (org_id:string) => {
   const queryClient = useQueryClient();
 
   const { toast } = useToast();
 
-  const fetchBoards = async (orgId: string) => {
+  const fetchBoards = async (org_id: string) => {
     try {
-      const response = await axios.get(`http://localhost:4000/api/boards/all/${orgId}`);
+      const response = await axios.get(`http://localhost:4000/api/boards/all/${org_id}`);
       return response.data; // Получаем данные из response.data
     } catch (error) {
       throw new Error(`Error fetching boards: ${error}`);
@@ -56,8 +54,8 @@ export const useBoards = (orgId:string) => {
     ResponseBoard[],
     FetchError
   >({
-    queryKey: ["boards",orgId],
-    queryFn: () => fetchBoards(orgId),
+    queryKey: ["boards",org_id],
+    queryFn: () => fetchBoards(org_id),
   });
 
 
@@ -76,7 +74,6 @@ export const useBoards = (orgId:string) => {
     },
     onSuccess: ({ data }) => {
 
-      console.log(data)
       queryClient.invalidateQueries({
         queryKey: ["boards"],
       });
@@ -96,12 +93,15 @@ export const useBoards = (orgId:string) => {
   });
 
   const deleteBoard = useMutation<AxiosResponse, FetchError, string>({
-    mutationFn: (boardId: string) => {
-      return axios.delete(`http://localhost:4000/api/boards/${boardId}`);
+    mutationFn: (board_id: string) => {
+      return axios.delete(`http://localhost:4000/api/boards/${board_id}`);
     },
     onSuccess: ({ data }) => {
+
+      console.log(data)
+
       queryClient.invalidateQueries({
-        queryKey: ["boards"],
+        queryKey: ["board"],
       });
       toast({
         description: `Board ${data.title} successfully deleted`,

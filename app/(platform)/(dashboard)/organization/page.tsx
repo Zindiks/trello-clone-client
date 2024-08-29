@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 export default function Page() {
   const count = useSelector((state: RootState) => state.mobileSidebar.value);
 
-  const org = useSelector((state: RootState) => state.organization.orgId);
+  const org = useSelector((state: RootState) => state.organization.org_id);
 
   console.log(org)
   const dispatch = useDispatch();

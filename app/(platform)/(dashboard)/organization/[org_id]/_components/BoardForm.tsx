@@ -1,10 +1,4 @@
 import { useState } from "react";
-import { useBoards } from "@/hooks/useBoards";
-import { Button } from "@/components/ui/button";
-import { z } from "zod";
-
-import { useToast } from "@/components/ui/use-toast";
-
 import { Input } from "@/components/ui/input";
 
 

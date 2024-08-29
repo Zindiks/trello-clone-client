@@ -10,13 +10,16 @@ const OrganizationIdPage = () => {
   const { isLoaded, userId, orgId } = useAuth();
 
   const dispatch = useDispatch();
-  const org = useSelector((state: RootState) => state.organization.orgId);
+  const org = useSelector((state: RootState) => state.organization.org_id);
+
+
+  
 
   useEffect(() => {
     if (orgId !== undefined && orgId !== null) {
       dispatch(changeOrg(orgId));
     }
-  }, [orgId, dispatch]); // Добавляем dispatch в зависимости
+  }, [orgId, dispatch]);
 
   if (!isLoaded) {
     return <BoardList.Skeleton />;
@@ -27,9 +30,7 @@ const OrganizationIdPage = () => {
     <div className="w-full">
 
       <Suspense fallback={<BoardList.Skeleton />}>
-
         <BoardList />
-
       </Suspense>
     </div>
   );

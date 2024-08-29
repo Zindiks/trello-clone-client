@@ -2,11 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface CurrentOrgState {
-  orgId: string;
+  org_id: string;
 }
 
 const initialState: CurrentOrgState = {
-  orgId: "",
+  org_id: "",
 };
 
 export const currentOrgSlice = createSlice({
@@ -14,7 +14,7 @@ export const currentOrgSlice = createSlice({
   initialState,
   reducers: {
     changeOrg: (state, action: PayloadAction<string>) => {
-      state.orgId = action.payload;
+      state.org_id = action.payload;
     },
   },
 });

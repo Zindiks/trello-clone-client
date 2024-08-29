@@ -30,12 +30,12 @@ const boardSchema = z.object({
     })
     .min(3, "Title must be at least 3 characters")
     .max(36, "Title must be at most 36 characters"),
-  orgId: z.string(),
-  imageId: z.string(),
-  imageThumbUrl: z.string(),
-  imageFullUrl: z.string(),
-  imageLinkHTML: z.string(),
-  imageUserName: z.string(),
+  org_id: z.string(),
+  image_id: z.string(),
+  image_thumb_url: z.string(),
+  image_full_url: z.string(),
+  image_link_html: z.string(),
+  image_username: z.string(),
 });
 
 export default function FormPopover({ children }: FormPopoverProp) {
@@ -43,7 +43,7 @@ export default function FormPopover({ children }: FormPopoverProp) {
 
   const [errors, setErrors] = useState<string | null>(null);
 
-  const org = useSelector((state: RootState) => state.organization.orgId);
+  const org = useSelector((state: RootState) => state.organization.org_id);
 
   const { createBoard } = useBoards(org);
   const { toast } = useToast();
@@ -60,18 +60,18 @@ export default function FormPopover({ children }: FormPopoverProp) {
       return;
     }
 
-    const [imageId, imageThumbUrl, imageFullUrl, imageLinkHTML, imageUserName] =
+    const [image_id, image_thumb_url, image_full_url, image_link_html, image_username] =
       image.split("|");
 
     if (org !== null && org !== undefined) {
       const createBoardInput = {
         title,
-        orgId: org,
-        imageId,
-        imageThumbUrl,
-        imageFullUrl,
-        imageLinkHTML,
-        imageUserName,
+        org_id: org,
+        image_id,
+        image_thumb_url,
+        image_full_url,
+        image_link_html,
+        image_username,
       };
 
       const validation = boardSchema.safeParse(createBoardInput);

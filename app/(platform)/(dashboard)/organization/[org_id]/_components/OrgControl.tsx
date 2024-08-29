@@ -13,9 +13,9 @@ export default function OrgContol() {
     if (!setActive) return;
 
     setActive({
-      organization: params.organizationId as string,
+      organization: params.org_id as string,
     });
-  }, [setActive, params.organizationId]);
+  }, [setActive, params.org_id]);
 
   return null;
 }

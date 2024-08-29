@@ -7,8 +7,6 @@ interface ListWrapperProps {
   children: ReactNode
 }
 
-
-
 const ListWrapper =({children}:ListWrapperProps) =>{
 
 
@@ -19,9 +17,5 @@ const ListWrapper =({children}:ListWrapperProps) =>{
     </li>
   )
 }
-
-
-
-
 
 export default ListWrapper;

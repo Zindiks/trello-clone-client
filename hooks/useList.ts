@@ -1,22 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosResponse } from "axios";
 import { useToast } from "@/components/ui/use-toast";
-import { auth } from "@clerk/nextjs/server";
-
 
 export interface ResponseList {
   id: string;
   title: string;
-  boardId: string;
+  board_id: string;
   order: number;
 
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface CreateList {
   title: string;
-  boardId: string;
+  board_id: string;
 }
 
 // export interface UpdateBoardTitle {
@@ -36,14 +34,14 @@ export interface FetchError {
 
 
 
-export const useLists = (boardId:string) => {
+export const useLists = (board_id:string) => {
   const queryClient = useQueryClient();
 
   const { toast } = useToast();
 
-  const fetchLists = async (boardId: string) => {
+  const fetchLists = async (board_id: string) => {
     try {
-      const response = await axios.get(`http://localhost:4000/api/lists/${boardId}`);
+      const response = await axios.get(`http://localhost:4000/api/lists/${board_id}`);
       return response.data; // Получаем данные из response.data
     } catch (error) {
       throw new Error(`Error fetching boards: ${error}`);
@@ -54,8 +52,8 @@ export const useLists = (boardId:string) => {
     ResponseList[],
     FetchError
   >({
-    queryKey: ["list",boardId],
-    queryFn: () => fetchLists(boardId),
+    queryKey: ["lists",board_id],
+    queryFn: () => fetchLists(board_id),
   });
 
 
@@ -74,7 +72,6 @@ export const useLists = (boardId:string) => {
     },
     onSuccess: ({ data }) => {
 
-      console.log(data)
       queryClient.invalidateQueries({
         queryKey: ["list"],
       });

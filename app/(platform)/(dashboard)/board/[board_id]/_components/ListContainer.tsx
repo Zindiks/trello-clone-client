@@ -1,29 +1,21 @@
 "use client";
 
 import { List } from "../types";
-import ListForm from "../_components/ListForm";
+import ListForm from "./ListForm";
 import { useEffect, useState } from "react";
 import ListItem from "./ListItem";
 
 interface ListContainerProps {
   data: List[];
-  boardId: string;
+  board_id: string;
 }
 
-const ListContainer = ({ data, boardId }: ListContainerProps) => {
-
-
-
-
-
+const ListContainer = ({ data, board_id }: ListContainerProps) => {
   const [orderedData, setOrderedData] = useState(data);
 
   useEffect(() => {
     setOrderedData(data);
   }, [data]);
-
-
-
 
   return (
     <ol className="flex gap-x-3 h-full">
