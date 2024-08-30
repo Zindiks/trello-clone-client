@@ -17,6 +17,8 @@ const ListContainer = ({ data, board_id }: ListContainerProps) => {
     setOrderedData(data);
   }, [data]);
 
+  console.log(data);
+
   return (
     <ol className="flex gap-x-3 h-full">
       {orderedData?.map((list, index) => {

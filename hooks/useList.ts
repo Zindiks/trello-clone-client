@@ -17,10 +17,11 @@ export interface CreateList {
   board_id: string;
 }
 
-// export interface UpdateBoardTitle {
-//   id: string;
-//   title: string;
-// }
+export interface UpdateListTitle {
+  id: string;
+  title: string;
+  board_id: string;
+}
 
 export interface FetchError {
   message: string;
@@ -31,32 +32,26 @@ export interface FetchError {
   };
 }
 
-
-
-
-export const useLists = (board_id:string) => {
+export const useLists = (board_id: string) => {
   const queryClient = useQueryClient();
 
   const { toast } = useToast();
 
   const fetchLists = async (board_id: string) => {
     try {
-      const response = await axios.get(`http://localhost:4000/api/lists/${board_id}`);
+      const response = await axios.get(
+        `http://localhost:4000/api/lists/${board_id}`,
+      );
       return response.data; // Получаем данные из response.data
     } catch (error) {
       throw new Error(`Error fetching boards: ${error}`);
     }
   };
 
-  const lists = useQuery<
-    ResponseList[],
-    FetchError
-  >({
-    queryKey: ["lists",board_id],
+  const lists = useQuery<ResponseList[], FetchError>({
+    queryKey: ["list",board_id],
     queryFn: () => fetchLists(board_id),
   });
-
-
 
   const createList = useMutation<AxiosResponse, FetchError, CreateList>({
     mutationFn: (formData) => {
@@ -71,7 +66,6 @@ export const useLists = (board_id:string) => {
       );
     },
     onSuccess: ({ data }) => {
-
       queryClient.invalidateQueries({
         queryKey: ["list"],
       });
@@ -80,7 +74,7 @@ export const useLists = (board_id:string) => {
       });
     },
     onError: ({ response }) => {
-      console.log(response)
+      console.log(response);
 
       toast({
         variant: "destructive",
@@ -90,72 +84,68 @@ export const useLists = (board_id:string) => {
     },
   });
 
-  // const deleteBoard = useMutation<AxiosResponse, FetchError, string>({
-  //   mutationFn: (boardId: string) => {
-  //     return axios.delete(`http://localhost:4000/api/boards/${boardId}`);
-  //   },
-  //   onSuccess: ({ data }) => {
-  //     queryClient.invalidateQueries({
-  //       queryKey: ["boards"],
-  //     });
-  //     toast({
-  //       description: `Board ${data.title} successfully deleted`,
-  //     });
-
-  //   },
-  //   onError: ({ message }) => {
-  //     toast({
-  //       variant: "destructive",
-  //       title: "Uh oh! Something went wrong.",
-  //       description: message,
-  //     });
-  //   },
-  // });
-
-  // const updateBoardTitle = useMutation<AxiosResponse, FetchError, UpdateBoardTitle>({
-  //   mutationFn: (formData) => {
-
-
-  //     console.log(formData);
-  //     return axios.patch(
-  //       "http://localhost:4000/api/boards/update",
-  //       JSON.stringify(formData),
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       },
-  //     );
-  //   },
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({
-  //       queryKey: ["board"],
-  //     });
-  //     toast({
-  //       description:  `Board title has been changed`,
-  //     });
-  //   },
-  //   onError: ({ response }) => {
-  //     toast({
-  //       variant: "destructive",
-  //       title: "Uh oh! Something went wrong.",
-  //       description: response.data.message,
-  //     });
-  //   },
-  // });
-
-
+  
+  const updateListTitle = useMutation<
+  AxiosResponse,
+  FetchError,
+  UpdateListTitle
+  >({
+    mutationFn: (formData) => {
+      return axios.patch(
+        "http://localhost:4000/api/lists/update",
+        JSON.stringify(formData),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+    },
+    onSuccess: () => {
+      // queryClient.invalidateQueries();
+      toast({
+        description: `List title has been changed`,
+      });
+    },
+    onError: ({ response }) => {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: response.data.message,
+      });
+    },
+  });
+  
   return {
     lists,
-    createList
-
+    createList,
+    updateListTitle,
   };
 };
-
 
 // data,
 //   error,
 //   isError,
 //   isLoading,
 
+// const deleteBoard = useMutation<AxiosResponse, FetchError, string>({
+//   mutationFn: (boardId: string) => {
+//     return axios.delete(`http://localhost:4000/api/boards/${boardId}`);
+//   },
+//   onSuccess: ({ data }) => {
+//     queryClient.invalidateQueries({
+//       queryKey: ["boards"],
+//     });
+//     toast({
+//       description: `Board ${data.title} successfully deleted`,
+//     });
 
+//   },
+//   onError: ({ message }) => {
+//     toast({
+//       variant: "destructive",
+//       title: "Uh oh! Something went wrong.",
+//       description: message,
+//     });
+//   },
+// });

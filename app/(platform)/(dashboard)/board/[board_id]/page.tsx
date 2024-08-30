@@ -1,5 +1,6 @@
 "use client";
 import ListContainer from "@/app/(platform)/(dashboard)/board/[board_id]/_components/ListContainer";
+import { useLists } from "@/hooks/useList";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -24,9 +25,13 @@ const BoardIdPage = ({ params }: BoardIdPageProps) => {
   const { board_id } = params;
 
   const { data, isLoading } = useQuery({
-    queryKey: ["list", board_id],
+    queryKey: [],
     queryFn: () => fetchBoard(board_id),
   });
+
+
+
+
 
   if (isLoading) {
     return <p>loading...</p>;

@@ -49,7 +49,6 @@ const ListForm = () => {
       
       {
         onSuccess: () => {
-          console.log("hello");
           disableEditing();
         },
         onError: () => {
