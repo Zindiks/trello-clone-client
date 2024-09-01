@@ -1,11 +1,13 @@
 import { ElementRef, useRef, useState } from "react";
 import { List } from "../types";
 import { useEventListener } from "usehooks-ts";
-import { useLists } from "@/hooks/useList";
+import { useLists } from "@/hooks/useLists";
 import { useQueryClient } from "@tanstack/react-query";
+import ListOptions from "./ListOptions";
 
 interface ListHeaderProps {
   data: List;
+  onAddCard: () => void;
 }
 
 const ListHeader = ({ data }: ListHeaderProps) => {
@@ -70,7 +72,7 @@ const ListHeader = ({ data }: ListHeaderProps) => {
   };
 
   return (
-    <div className="pt-2 px-2 text-sm font-semibold flex justify-between items-start gap-x-2">
+    <div className="pt-2 px-2 text-sm font-semibold flex justify-between items-center gap-x-2 pb-2">
       {isEditing ? (
         <form ref={formRef} className="flex-1 px-[2px]" action={onSubmit}>
           <input hidden id="id" name="id" defaultValue={data.id} />
@@ -101,6 +103,8 @@ const ListHeader = ({ data }: ListHeaderProps) => {
           {title}
         </div>
       )}
+
+      <ListOptions data={data} onAddCard={() => {}} />
     </div>
   );
 };

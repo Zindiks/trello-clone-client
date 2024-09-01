@@ -42,12 +42,14 @@ const BoardIdLayout: React.FC<BoardIdLayoutProps> = ({ children, params }) => {
 
       <div
         style={{ backgroundImage: `url(${data.image_full_url})` }}
-        className={"h-full w-full bg-cover"}
+        className={"h-full w-full bg-cover  "}
       >
         <BoardNavBar data={data} />
 
         <div className={"absolute inset-0 bg-black/10"} />
-        <main className="relative pt-12 p-2">{children}</main>
+        <main className="relative pt-12 p-2 h-full w-full overflow-x-scroll">
+          {children}
+        </main>
       </div>
     </>
   );

@@ -23,6 +23,16 @@ export interface UpdateListTitle {
   board_id: string;
 }
 
+export interface DeleteList {
+  id: string;
+  board_id: string;
+}
+
+export interface CopyList {
+  id: string;
+  board_id: string;
+}
+
 export interface FetchError {
   message: string;
   response: {
@@ -49,7 +59,7 @@ export const useLists = (board_id: string) => {
   };
 
   const lists = useQuery<ResponseList[], FetchError>({
-    queryKey: ["list",board_id],
+    queryKey: ["lists", board_id],
     queryFn: () => fetchLists(board_id),
   });
 
@@ -84,11 +94,41 @@ export const useLists = (board_id: string) => {
     },
   });
 
-  
+  const copyList = useMutation<AxiosResponse, FetchError, CopyList>({
+    mutationFn: (formData) => {
+      return axios.post(
+        "http://localhost:4000/api/lists/copy",
+        JSON.stringify(formData),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+    },
+    onSuccess: ({ data }) => {
+      queryClient.invalidateQueries({
+        queryKey: ["list"],
+      });
+      toast({
+        description: `List ${data.title} successfully created`,
+      });
+    },
+    onError: ({ response }) => {
+      console.log(response);
+
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: response.data.message,
+      });
+    },
+  });
+
   const updateListTitle = useMutation<
-  AxiosResponse,
-  FetchError,
-  UpdateListTitle
+    AxiosResponse,
+    FetchError,
+    UpdateListTitle
   >({
     mutationFn: (formData) => {
       return axios.patch(
@@ -105,6 +145,7 @@ export const useLists = (board_id: string) => {
       // queryClient.invalidateQueries();
       toast({
         description: `List title has been changed`,
+        duration: 1000,
       });
     },
     onError: ({ response }) => {
@@ -115,37 +156,68 @@ export const useLists = (board_id: string) => {
       });
     },
   });
-  
+
+
+  // TODO: Replace temporary Type any
+  const updateListsOrder = useMutation<AxiosResponse, FetchError, any>({
+    mutationFn: ([formData, board_id]) => {
+      return axios.put(
+        "http://localhost:4000/api/lists/order/" + board_id,
+        JSON.stringify(formData),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["list"],
+      });
+      toast({
+        description: `lists succesfully reordered`,
+        duration: 1000,
+      });
+    },
+    onError: ({ response }) => {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: response.data.message,
+      });
+    },
+  });
+
+  const deleteList = useMutation<AxiosResponse, FetchError, DeleteList>({
+    mutationFn: ({ id, board_id }) => {
+      return axios.delete(
+        `http://localhost:4000/api/lists/${id}/board/${board_id}`,
+      );
+    },
+    onSuccess: ({ data }) => {
+      queryClient.invalidateQueries({
+        queryKey: ["list"],
+      });
+      toast({
+        description: `List ${data.title} successfully deleted`,
+      });
+    },
+    onError: ({ message }) => {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: message,
+      });
+    },
+  });
+
   return {
     lists,
     createList,
+    deleteList,
+    copyList,
     updateListTitle,
+    updateListsOrder,
   };
 };
-
-// data,
-//   error,
-//   isError,
-//   isLoading,
-
-// const deleteBoard = useMutation<AxiosResponse, FetchError, string>({
-//   mutationFn: (boardId: string) => {
-//     return axios.delete(`http://localhost:4000/api/boards/${boardId}`);
-//   },
-//   onSuccess: ({ data }) => {
-//     queryClient.invalidateQueries({
-//       queryKey: ["boards"],
-//     });
-//     toast({
-//       description: `Board ${data.title} successfully deleted`,
-//     });
-
-//   },
-//   onError: ({ message }) => {
-//     toast({
-//       variant: "destructive",
-//       title: "Uh oh! Something went wrong.",
-//       description: message,
-//     });
-//   },
-// });

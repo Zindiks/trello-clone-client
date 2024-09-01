@@ -36,29 +36,29 @@ export interface FetchError {
   };
 }
 
-export const useBoards = (org_id:string) => {
+
+//TODO: REFACTOR HOOK TO AVOID PROPS ord_id seems like unnecessary
+
+export const useBoards = (org_id: string) => {
   const queryClient = useQueryClient();
 
   const { toast } = useToast();
 
   const fetchBoards = async (org_id: string) => {
     try {
-      const response = await axios.get(`http://localhost:4000/api/boards/all/${org_id}`);
+      const response = await axios.get(
+        `http://localhost:4000/api/boards/all/${org_id}`,
+      );
       return response.data; // Получаем данные из response.data
     } catch (error) {
       throw new Error(`Error fetching boards: ${error}`);
     }
   };
 
-  const boards = useQuery<
-    ResponseBoard[],
-    FetchError
-  >({
-    queryKey: ["boards",org_id],
+  const boards = useQuery<ResponseBoard[], FetchError>({
+    queryKey: ["boards", org_id],
     queryFn: () => fetchBoards(org_id),
   });
-
-
 
   const createBoard = useMutation<AxiosResponse, FetchError, CreateBoard>({
     mutationFn: (formData) => {
@@ -73,7 +73,6 @@ export const useBoards = (org_id:string) => {
       );
     },
     onSuccess: ({ data }) => {
-
       queryClient.invalidateQueries({
         queryKey: ["boards"],
       });
@@ -82,7 +81,7 @@ export const useBoards = (org_id:string) => {
       });
     },
     onError: ({ response }) => {
-      console.log(response)
+      console.log(response);
 
       toast({
         variant: "destructive",
@@ -97,8 +96,7 @@ export const useBoards = (org_id:string) => {
       return axios.delete(`http://localhost:4000/api/boards/${board_id}`);
     },
     onSuccess: ({ data }) => {
-
-      console.log(data)
+      console.log(data);
 
       queryClient.invalidateQueries({
         queryKey: ["board"],
@@ -106,7 +104,6 @@ export const useBoards = (org_id:string) => {
       toast({
         description: `Board ${data.title} successfully deleted`,
       });
-
     },
     onError: ({ message }) => {
       toast({
@@ -117,11 +114,12 @@ export const useBoards = (org_id:string) => {
     },
   });
 
-  const updateBoardTitle = useMutation<AxiosResponse, FetchError, UpdateBoardTitle>({
+  const updateBoardTitle = useMutation<
+    AxiosResponse,
+    FetchError,
+    UpdateBoardTitle
+  >({
     mutationFn: (formData) => {
-
-
-      console.log(formData);
       return axios.patch(
         "http://localhost:4000/api/boards/update",
         JSON.stringify(formData),
@@ -137,7 +135,8 @@ export const useBoards = (org_id:string) => {
         queryKey: ["board"],
       });
       toast({
-        description:  `Board title has been changed`,
+        description: `Board title has been changed`,
+        duration: 1000,
       });
     },
     onError: ({ response }) => {
@@ -149,7 +148,6 @@ export const useBoards = (org_id:string) => {
     },
   });
 
-
   return {
     boards,
     createBoard,
@@ -158,10 +156,7 @@ export const useBoards = (org_id:string) => {
   };
 };
 
-
 // data,
 //   error,
 //   isError,
 //   isLoading,
-
-

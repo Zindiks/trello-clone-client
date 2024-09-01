@@ -7,14 +7,13 @@ import { useEventListener, useOnClickOutside } from "usehooks-ts";
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
-import { useLists } from "@/hooks/useList";
+import { useLists } from "@/hooks/useLists";
 
 const ListForm = () => {
   const formRef = useRef<ElementRef<"form">>(null);
   const inputRef = useRef<ElementRef<"input">>(null);
 
   const { board_id } = useParams();
-
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -46,10 +45,10 @@ const ListForm = () => {
 
     createList.mutate(
       { title, board_id },
-      
+
       {
-        onSuccess: () => {
-          disableEditing();
+        onSuccess: ({ data }) => {
+          console.log(data);
         },
         onError: () => {
           console.log("Something Wrong");
