@@ -1,4 +1,4 @@
 export const siteConfig = {
-  name: "Taskify",
-  desciption: "Tutorial",
+  name: "Trello clone",
+  desciption: "trello clone using Next.js TS React-Query ReduxRTK",
 };
