@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import mobileSidebarReducer from "./slices/mobileSidebarSlice";
-import currentOrgReducer from "./slices/currentOrgSlice"
+import currentOrgReducer from "./slices/currentOrgSlice";
+import cardModelSlice from "./slices/cardModelSlice";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       mobileSidebar: mobileSidebarReducer,
       organization: currentOrgReducer,
+      cardModal: cardModelSlice,
     },
   });
 };

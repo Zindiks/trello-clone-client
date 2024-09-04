@@ -2,6 +2,7 @@
 import ListContainer from "@/app/(platform)/(dashboard)/board/[board_id]/_components/ListContainer";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { Car } from "lucide-react";
 
 interface BoardIdPageProps {
   params: {
@@ -33,7 +34,7 @@ const BoardIdPage = ({ params }: BoardIdPageProps) => {
   }
 
   return (
-    <div className={"pt-20 "}>
+    <div className={"pt-20"}>
       <ListContainer board_id={board_id} data={data} />
     </div>
   );

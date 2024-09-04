@@ -63,6 +63,22 @@ export const useCards = () => {
   //   queryFn: () => fetchCards(list_id),
   // });
 
+  // const fetchCardById = async (card_id: string) => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:4000/api/cards/${card_id}`,
+  //     );
+  //     return response.data;
+  //   } catch (error) {
+  //     throw new Error(`Error fetching boards: ${error}`);
+  //   }
+  // };
+
+  // const card = useQuery<ResponseCard[], FetchError>({
+  //   queryKey: ["cards", card_id],
+  //   queryFn: () => fetchCard(card_id),
+  // });
+
   const createCard = useMutation<AxiosResponse, FetchError, CreateCard>({
     mutationFn: (formData) => {
       return axios.post(
